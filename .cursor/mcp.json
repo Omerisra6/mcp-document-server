@@ -1,8 +1,0 @@
-{
-    "mcpServers": {
-      "documents": {
-        "command": "node",
-        "args": ["/Users/omerisra6/Desktop/dev/mcp-simple/dist/stdio-server.js"]
-      }
-    }
-  }
