@@ -1,0 +1,38 @@
+{
+  "name": "mcp-simple",
+  "version": "1.0.0",
+  "description": "A simple server implementing the Model Context Protocol",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon dist/index.js",
+    "setup:domain": "sudo ./hosts-setup.sh",
+    "stdio": "node /Users/omerisra6/Desktop/dev/mcp-simple/dist/stdio-server.js",
+    "client": "node dist/client.js",
+    "cli": "node dist/mcp-cli.js",
+    "bridge": "node dist/inspector-bridge.js",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "bin": {
+    "mcp-cli": "./dist/mcp-cli.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.8.0",
+    "express": "^4.18.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.30",
+    "@types/uuid": "^9.0.8",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.4.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+}

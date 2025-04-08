@@ -1,0 +1,87 @@
+[
+  {
+    "id": "doc_1681234567_abc123de",
+    "name": "Introduction to Artificial Intelligence",
+    "description": "An overview of AI concepts, applications, and ethical considerations",
+    "webViewLink": "file:///Users/omerisra6/Desktop/dev/mcp-simple/data/documents/sample1.md",
+    "keywords": [
+      "artificial",
+      "intelligence",
+      "machine",
+      "learning",
+      "nlp",
+      "vision",
+      "robotics",
+      "ethical",
+      "considerations"
+    ]
+  },
+  {
+    "id": "doc_1681234890_fgh456ij",
+    "name": "Modern Web Development",
+    "description": "A guide to modern web development technologies and practices",
+    "webViewLink": "file:///Users/omerisra6/Desktop/dev/mcp-simple/data/documents/sample2.md",
+    "keywords": [
+      "web",
+      "development",
+      "frontend",
+      "backend",
+      "javascript",
+      "frameworks",
+      "performance",
+      "fullstack"
+    ]
+  },
+  {
+    "id": "doc_1681235123_klm789no",
+    "name": "Cloud Computing Fundamentals",
+    "description": "Overview of cloud computing models, benefits, and emerging trends",
+    "webViewLink": "file:///Users/omerisra6/Desktop/dev/mcp-simple/data/documents/sample3.md",
+    "keywords": [
+      "cloud",
+      "computing",
+      "iaas",
+      "paas",
+      "saas",
+      "public",
+      "private",
+      "hybrid",
+      "security",
+      "serverless"
+    ]
+  },
+  {
+    "id": "doc_1744121505803_ulgj1sd",
+    "name": "Test Machine Document",
+    "description": "Keywords: Test, Machine, Document, This, information, about, machines.",
+    "webViewLink": "file:///Users/omerisra6/Desktop/dev/mcp-simple/data/documents/doc_1744121505803_ulgj1sd.md",
+    "keywords": [
+      "Test",
+      "Machine",
+      "Document",
+      "This",
+      "information",
+      "about",
+      "machines."
+    ]
+  },
+  {
+    "id": "doc_1744121520907_3kjyul0",
+    "name": "Test Machine Document",
+    "description": "Keywords: Test, Machine, Document, This, information, about, machines., have, MacBook, Dell, desktop.",
+    "webViewLink": "file:///Users/omerisra6/Desktop/dev/mcp-simple/data/documents/doc_1744121520907_3kjyul0.md",
+    "keywords": [
+      "Test",
+      "Machine",
+      "Document",
+      "This",
+      "information",
+      "about",
+      "machines.",
+      "have",
+      "MacBook",
+      "Dell",
+      "desktop."
+    ]
+  }
+]
