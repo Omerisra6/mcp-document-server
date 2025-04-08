@@ -17,7 +17,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build output
-# Don't ignore dist since we want the compiled JavaScript for Cursor
+dist/
+
+# Cursor files
+.cursor/
 
 # OS specific files
 .DS_Store
