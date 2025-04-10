@@ -1,6 +1,16 @@
-# MCP Simple Server
+# MCP Document Server
 
-A simple server implementing the Model Context Protocol (MCP).
+A simple server implementing the Model Context Protocol (MCP) for document search and retrieval.
+
+## Features
+
+- Document storage and retrieval using MCP
+- Semantic search capabilities
+- Compatible with Cursor and other MCP clients
+- Pluggable document service architecture:
+  - Local document storage with JSON
+  - Confluence integration for searching workspace documents
+- Support for HTML
 
 ## Setup
 
@@ -9,130 +19,108 @@ A simple server implementing the Model Context Protocol (MCP).
 npm install
 ```
 
-2. Start the server:
+2. Build the TypeScript code:
 ```
-npm start
+npm run build
 ```
 
-The server will run on http://localhost:3001 by default.
-
-## Using the Stdio Server
-
-This project includes a stdio-based implementation of the MCP server that communicates via standard input/output instead of HTTP/SSE.
-
-### Running the Stdio Server
-
+3. Start the server:
 ```
 npm run stdio
 ```
 
-The stdio server accepts JSON-RPC messages via stdin and responds via stdout. All logs are sent to stderr to avoid interfering with the JSON-RPC messages.
+## Using with Cursor
 
-### Using the MCP Inspector
+This server is designed to be used with Cursor. You can search for documents using the `search` tool with a keyword parameter.
 
-If you want to use the MCP Inspector with the stdio server, we've created a bridge that connects the HTTP-based inspector to our stdio server:
-
+### Example:
 ```
-npm run bridge
-```
-
-This will:
-1. Start the stdio server as a child process
-2. Create an HTTP server on port 3001
-3. Forward JSON-RPC requests from HTTP to the stdio server
-4. Return responses back to the HTTP clients
-
-You can then connect the MCP Inspector to http://localhost:3001 and it will work with the stdio server.
-
-### Using the Interactive CLI
-
-An interactive command-line interface is provided for easy interaction with the stdio server:
-
-```
-npm run cli
+search({
+  keyword: "data"
+})
 ```
 
-This will start an interactive shell where you can enter search queries:
+### Creating Documents
+
+You can create new documents directly from Cursor:
 
 ```
-MCP CLI - Interactive interface to the MCP server
-Type "exit" or press Ctrl+C to quit
-Examples:
-  documents/javascript - Search for documents with keyword "javascript"
-  help - Show this help message
---------------------------------------------------
-> 
+create_document({
+  title: "New Confluence Page",
+  content: "This is a page created in Confluence",
+  serviceId: "confluence"
+})
 ```
 
-You can enter simple keywords or full document URIs to search.
+## Document Services
 
-### Using the Sample Client
+The architecture is based on pluggable document services. Each service implements a common interface for searching and retrieving documents.
 
-A sample client is included to demonstrate how to communicate with the stdio server programmatically:
+### Local Storage Service
 
-```
-npm run client <query>
-```
+The local storage service stores documents on the local filesystem:
+- Documents are stored in `data/documents/` directory (created automatically when needed)
+- Metadata is stored in `data/documents.json` (created automatically when needed)
+- Supports both Markdown and HTML formats for document content
 
-For example:
-```
-npm run client javascript
-```
+### Confluence Service
 
-This will:
-1. Start the stdio server as a child process
-2. Send a query for documents matching "javascript"
-3. Display the results and exit
+The Confluence service searches for documents in your Confluence workspace using the Confluence REST API with CQL (Confluence Query Language) for powerful searches. To enable this feature, set the following environment variables:
 
-### Communicating Directly with the Stdio Server
-
-You can also communicate directly with the stdio server by piping JSON-RPC messages:
-
-```
-echo '{"jsonrpc":"2.0","id":"1","method":"mcp.uri","params":{"uri":"documents/sample"}}' | node stdio-server.mjs
+```bash
+# Confluence configuration
+export CONFLUENCE_BASE_URL="https://your-domain.atlassian.net/wiki"
+export CONFLUENCE_USERNAME="your-email@example.com"
+export CONFLUENCE_API_TOKEN="your-api-token"
+export CONFLUENCE_SPACE="your-space-key"
 ```
 
-## Custom Domain Setup
+You can set these variables before starting the server:
 
-You can access the server via a custom domain by mapping it in your hosts file.
-
-### Automatic Setup
-
-Run the included setup script with sudo permissions:
-
-```
-sudo ./hosts-setup.sh
+```bash
+CONFLUENCE_BASE_URL="https://your-domain.atlassian.net/wiki" \
+CONFLUENCE_USERNAME="your-email@example.com" \
+CONFLUENCE_API_TOKEN="your-api-token" \
+CONFLUENCE_SPACE="your-space-key" \
+npm run stdio
 ```
 
-This will add `mcp.local` to your hosts file pointing to `127.0.0.1` and flush your DNS cache.
+### Authentication Details
 
-### Manual Setup
+The service uses Basic Authentication with your email and API token. The credentials are sent in the Authorization header as a Base64-encoded string:
 
-1. Edit your hosts file:
-   - On macOS/Linux: `/etc/hosts`
-   - On Windows: `C:\Windows\System32\drivers\etc\hosts`
-
-2. Add the following line:
 ```
-127.0.0.1 mcp.local
+Authorization: Basic <base64-encoded-email:token>
 ```
 
-3. Flush your DNS cache:
-   - On macOS: `sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder`
-   - On Windows: `ipconfig /flushdns`
-   - On Linux: Depends on your distribution
+## Managing Documents
 
-4. Access the server at `http://mcp.local:3001`
+The local storage service automatically creates a `data/documents` directory and `data/documents.json` file on first use. These files are not included in the repository and will be generated as needed.
 
-## Environment Variables
+## Extending the Server
 
-You can customize the server by setting the following environment variables:
+### Adding New Document Services
 
-- `PORT`: The port to run the server on (default: 3001)
-- `DOMAIN_NAME`: The custom domain name (default: mcp.local)
-- `SERVER_IP`: The IP address to bind to (default: 127.0.0.1)
+The MCP server is designed with extensibility in mind. You can easily add new document services by implementing the `DocumentService` interface:
 
-Example:
+```typescript
+interface DocumentService {
+  id: string;
+  getByKeywords: (keywords: string[]) => Promise<Document[]>;
+  createDocument?: (title: string, content: string) => Promise<Document>;
+}
 ```
-PORT=8080 DOMAIN_NAME=myapi.local npm start
-``` 
+
+To add a new service:
+
+1. Create a new directory in `src/services/` for your service
+2. Implement the `DocumentService` interface
+3. Register your service in `src/services/index.ts`
+
+Some potential document services to implement:
+
+- **Google Drive**: Connect to Google Drive API for document storage and retrieval
+- **OneDrive/SharePoint**: Integrate with Microsoft's document services
+- **Notion**: Add Notion workspace support
+- **GitHub Wiki**: Connect to GitHub wikis for documentation
+- **Custom Database**: Store documents in SQL or NoSQL databases
